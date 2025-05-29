@@ -16,6 +16,16 @@ import java.time.LocalDate;
 
 import java.util.*;
 import java.util.Map;
+import com.example.attendance.model.*;
+import com.example.attendance.repository.AttendanceRepo;
+import com.example.attendance.repository.AttpercentRepo;
+import com.example.attendance.repository.ExamRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.Optional;
 
 @Service
@@ -26,6 +36,8 @@ public class AttendanceService {
 
     @Autowired
     AttpercentRepo attperrepo;
+    @Autowired
+    ExamRepository er;
 
     public void addattendance(AttendanceModel attendance) {
         attrepo.save(attendance);
@@ -44,68 +56,76 @@ public class AttendanceService {
         return attperrepo.findBystdId(id);
     }
 
-    public List<AttendanceModel> attfac(String id, LocalDate date) { return attrepo.findByfacIdAndDate(id,date);}
+    public List<AttendanceModel> attfac(String id, LocalDate date) { 
+        return attrepo.findByfacIdAndDate(id,date);
+    }
 
     public List<Attcourse> attfacy(String id, LocalDate stdate, LocalDate endate)
     {
             return attperrepo.findByfacIdAndDateBetween(id,stdate,endate);
     }
 
+    public List<Examnative> findnative(){
+        return er.findId();
+    }
+    public List<ExamModel> findAll(){
+        return er.findAll();
+    }
 
+    public void generateTimetable(Map<String, String> courses, LocalDate startDate, LocalDate endDate) {
+            String[] sessions = {"Forenoon", "Afternoon"};
+            String[] timeSlots = {"9:00-12:00", "1:00-4:00"};
+            
+            Random random = new Random();
+    
+            List<String> courseCodes = new ArrayList<>(courses.keySet());
+            Collections.shuffle(courseCodes);
+    
+            LocalDate currentDate = startDate;
+            int scheduledCoursesCount = 0;
+    
+            for (String courseId : courseCodes) {
+                String courseName = courses.get(courseId);
+                boolean slotFoundForThisCourse = false;
+    
 
+                while (!slotFoundForThisCourse && !currentDate.isAfter(endDate)) {
+                    if (currentDate.getDayOfWeek() != DayOfWeek.SUNDAY) {
+                        int sessionIndex = random.nextInt(sessions.length);
+                        String randomSession = sessions[sessionIndex];
+                        String randomTimeSlot = timeSlots[sessionIndex];
 
-//
-//    static class TimeSlot {
-//        LocalDate date;
-//        String session;
-//        TimeSlot(LocalDate date, String session) {
-//            this.date = date;
-//            this.session = session;
-//        }
-//        @Override
-//        public String toString() {
-//            return date.toString() + " - " + session;
-//        }
-//    }
-//
-//    public void generateTimetable(Map<String, String> courses, LocalDate startDate, String filename)throws IOException {
-//
-//        String[] sessions = {"Morning", "Afternoon"};
-//        Random random = new Random();
-//
-//        List<TimeSlot> timeSlots = new ArrayList<>();
-//        LocalDate currentDate = startDate;
-//        int courseIndex = 0;
-//
-//        while (courseIndex < courses.size()) {
-//            if (currentDate.getDayOfWeek() != DayOfWeek.SUNDAY) {
-//                String randomSession = sessions[random.nextInt(sessions.length)];
-//                timeSlots.add(new TimeSlot(currentDate, randomSession));
-//                courseIndex++;
-//                currentDate = currentDate.plusDays(2); // 1 day gap between exams
-//            } else {
-//                currentDate = currentDate.plusDays(1);
-//            }
-//        }
-//
-//        List<String> courseCodes = new ArrayList<>(courses.keySet());
-//        Collections.shuffle(courseCodes);
-//        Map<String, TimeSlot> courseSchedule = new LinkedHashMap<>();
-//        for (int i = 0; i < courseCodes.size(); i++) {
-//            courseSchedule.put(courseCodes.get(i), timeSlots.get(i));
-//        }
-//
-//        try (FileWriter writer = new FileWriter(filename)) {
-//            writer.write("Date,Session,Course Code,Course Name\n");
-//            for (var entry : courseSchedule.entrySet()) {
-//                TimeSlot slot = entry.getValue();
-//                String courseCode = entry.getKey();
-//                String courseName = courses.get(courseCode);
-//                writer.write(String.format("%s,%s,%s,%s\n", slot.date, slot.session, courseCode, courseName));
-//            }
-//        }
-//    }
+                        ExamModel exam = new ExamModel();
+                        exam.setCourseId(courseId);
+                        exam.setCourseName(courseName);
+                        exam.setSession(randomSession);
+                        exam.setTimeSlot(randomTimeSlot);
+                        exam.setDate(currentDate);
+
+                        er.save(exam);
+
+    
+                        scheduledCoursesCount++;
+                        slotFoundForThisCourse = true;
+
+                        currentDate = currentDate.plusDays(2);
+                    } else {
+                        currentDate = currentDate.plusDays(1);
+                    }
+                }
+    
+                if (!slotFoundForThisCourse) {
+                    System.err.println("Warning: Could not schedule course '" + courseId + "' (" + courseName + ") and subsequent courses. End date reached or no suitable slots found.");
+                break;
+            }
+        }
+
+        if (scheduledCoursesCount == courseCodes.size()) {
+            System.out.println("Successfully scheduled all " + scheduledCoursesCount + " courses.");
+        } else {
+            System.out.println("Warning: Not all courses were scheduled. Scheduled " + scheduledCoursesCount + " out of " + courseCodes.size() + " courses within the given date range.");
+        }
+    }
+
 
 }
-
-
