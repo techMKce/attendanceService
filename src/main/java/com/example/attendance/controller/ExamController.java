@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/attendance")
 @CrossOrigin(origins = "*")
 public class ExamController {
     private final ObjectMapper objectMapper = new ObjectMapper();
