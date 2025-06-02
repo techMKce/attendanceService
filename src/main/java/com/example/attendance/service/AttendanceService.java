@@ -47,6 +47,10 @@ public class AttendanceService {
         return attrepo.findByStdIdAndDatesAndCourseId(stdId,dates,courseId);
     }
 
+    public Optional<AttendanceModel> findByStdIdAndDatedAndSession(String stdId, LocalDate dates,String courseId, String session) {
+        return attrepo.findByStdIdAndDatesAndCourseIdAndSession(stdId,dates,courseId,session);
+    }
+
 
     public List<AttperModel> attallpercent() {
         return attperrepo.findAllPercent();

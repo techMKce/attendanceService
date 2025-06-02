@@ -24,7 +24,7 @@ public class AttendanceController {
         StringBuilder result = new StringBuilder();
         for(AttendanceModel att : attendance)
         {
-            Optional<AttendanceModel> exists = service.findByStdIdAndDated(att.getStdId(),att.getDates(),att.getCourseId());
+            Optional<AttendanceModel> exists = service.findByStdIdAndDatedAndSession(att.getStdId(),att.getDates(), att.getCourseId(),att.getSession());
             if(exists.isPresent())
             {
                 AttendanceModel at;
