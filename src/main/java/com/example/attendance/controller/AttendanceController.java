@@ -18,7 +18,7 @@ public class AttendanceController {
 
     @Autowired
     AttendanceService service;
-    @PostMapping("/attupdate")
+    @PostMapping("/attendanceupdate")
     public String addattendance(@RequestBody List<AttendanceModel> attendance)
     {
         StringBuilder result = new StringBuilder();

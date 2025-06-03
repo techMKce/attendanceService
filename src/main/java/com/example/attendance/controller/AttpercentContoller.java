@@ -1,6 +1,7 @@
 package com.example.attendance.controller;
 
 import com.example.attendance.model.Attcourse;
+import com.example.attendance.model.AttendanceAllModel;
 import com.example.attendance.model.AttendanceModel;
 import com.example.attendance.model.AttperModel;
 import com.example.attendance.service.AttendanceService;
@@ -21,31 +22,33 @@ public class AttpercentContoller {
 
     @Autowired
     AttendanceService service;
-    @GetMapping("/attpercent")
-    public List<AttperModel> getattendance()
+    @GetMapping("/allattendancepercentage")
+    public List<AttendanceAllModel> getattendance()
     {
         return service.attallpercent();
     }
 
-    @GetMapping("/getstudent")
+    @GetMapping("/getstudentbyid")
     public List<AttperModel> getstudentatt(@RequestParam String id)
     {
         return service.attstdper(id);
     }
 
-    @GetMapping("/getfaculty")
-    public List<AttendanceModel> getfacultyatt(@RequestParam String id,
+    @GetMapping("/getfacultybydate")
+    public List<AttendanceModel> getfacultyatt(@RequestParam String facultyid,
+                                               @RequestParam String courseid,
                                                @RequestParam LocalDate date)
     {
-        return service.attfac(id,date);
+        return service.attfac(facultyid,courseid,date);
     }
 
-    @GetMapping("/getfacultyy")
-    public List<Attcourse> getfacultyatt(@RequestParam String id,
+    @GetMapping("/getfacultybydates")
+    public List<Attcourse> getfacultyatt(@RequestParam String facultyid,
+                                         @RequestParam String courseid,
                                          @RequestParam LocalDate stdate,
                                          @RequestParam LocalDate endate)
     {
-        return service.attfacy(id,stdate,endate);
+        return service.attfacy(facultyid,courseid,stdate,endate);
     }
 
 }

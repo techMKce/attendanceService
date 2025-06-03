@@ -52,7 +52,7 @@ public class AttendanceService {
     }
 
 
-    public List<AttperModel> attallpercent() {
+    public List<AttendanceAllModel> attallpercent() {
         return attperrepo.findAllPercent();
     }
 
@@ -60,13 +60,13 @@ public class AttendanceService {
         return attperrepo.findBystdId(id);
     }
 
-    public List<AttendanceModel> attfac(String id, LocalDate date) { 
-        return attrepo.findByfacIdAndDate(id,date);
+    public List<AttendanceModel> attfac(String facultyid,String courseid, LocalDate date) {
+        return attrepo.findByfacIdAndDate(facultyid,courseid,date);
     }
 
-    public List<Attcourse> attfacy(String id, LocalDate stdate, LocalDate endate)
+    public List<Attcourse> attfacy(String facultyid,String courseid, LocalDate stdate, LocalDate endate)
     {
-            return attperrepo.findByfacIdAndDateBetween(id,stdate,endate);
+            return attperrepo.findByfacIdAndDateBetween(facultyid,courseid,stdate,endate);
     }
 
     public List<Examnative> findnative(){

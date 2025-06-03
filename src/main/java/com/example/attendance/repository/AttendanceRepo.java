@@ -18,8 +18,9 @@ public interface AttendanceRepo extends JpaRepository<AttendanceModel, Long> {
     @Query(nativeQuery = true,
             value = "select " +
                     "* from attendance " +
-                    " where faculty_id=:id and dates=:date ")
-    public List<AttendanceModel> findByfacIdAndDate(@Param("id") String id,
+                    " where faculty_id=:fid and course_id=:cid and dates=:date ")
+    public List<AttendanceModel> findByfacIdAndDate(@Param("fid") String facultyid,
+                                         @Param("cid") String courseId,
                                          @Param("date") LocalDate date);
 
 
