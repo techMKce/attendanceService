@@ -8,9 +8,10 @@ public interface AttperModel {
     int getSem();
     String getStdId();
     String getStdName();
-    String getSession();
     String getDeptId();
     String getDeptName();
+    String getCourseId();
+    String getCourseName();
     int getPresentcount();
     int getTotaldays();
     float getPercentage();
