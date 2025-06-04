@@ -53,14 +53,14 @@ public class AttpercentContoller {
     }
 
 
-    @GetMapping("/deletebycourseid")
+    @DeleteMapping("/deletebycourseid")
     public ResponseEntity<String> delcourseid(@RequestParam String courseid)
     {
         service.delcourse(courseid);
         return ResponseEntity.ok("Course deleted successfully");
     }
 
-    @GetMapping("/deletestudentid")
+    @DeleteMapping("/deletestudentid")
     public ResponseEntity<String> deletestudent(@RequestParam String studentid)
     {
         service.delstd(studentid);
