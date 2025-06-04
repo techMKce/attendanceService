@@ -29,17 +29,20 @@ public interface AttpercentRepo extends JpaRepository<AttendanceModel , Long> {
 
 
     @Query(nativeQuery = true,
-            value = "select " +
-                    "batch," + "sem," +
-                    "std_id as stdId," + "std_name as stdName," +
-                    "dept_id as deptId," + "dept_name as deptName," +
-                    "course_id as courseId," + "course_name as courseName," +
-                    "SUM(status) as presentcount,"+
-                    "(count(dates)) as totaldays, " +
-                    "(sum(status)/(count(dates)))*100 as percentage from attendance " +
-                    " where std_id=:id "+
-                    "group by batch,sem,std_id,std_name,dept_id,dept_name,course_id,course_name;"
-    )
+            value = "select " + 
+                    "batch, sem," +
+                    "std_id as stdId," +
+                    "std_name as stdName," +
+                    "dept_id as deptId," +
+                    "dept_name as deptName," +
+                    "course_id as courseId," +
+                    "course_name as courseName," +
+                    "SUM(status) as presentCount," +
+                    "count(dates) as totalDays, " +
+                    "ROUND((SUM(status)::decimal / count(dates)) * 100, 2) as percentage " +
+                    "from attendance " +
+                    "where std_id=:id " +
+                    "group by batch, sem, std_id, std_name, dept_id, dept_name, course_id, course_name;")
     public List<AttperModel> findBystdId(@Param("id") String id);
 
 
