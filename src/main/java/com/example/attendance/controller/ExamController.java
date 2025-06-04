@@ -24,11 +24,6 @@ public class ExamController {
     AttendanceService service;
     @Autowired
     ExamRepository er;
-    @PostMapping("/addexam")
-    public ResponseEntity<String> addExam()
-    {
-        return ResponseEntity.ok("Exam added successfully");
-    }
     static class CourseInput {
         public String courseId;
         public String name;
@@ -39,13 +34,9 @@ public class ExamController {
         public String endDate;
     }
     @PostMapping("/postexam")
-    public ResponseEntity<String> generateExam(
-
-            @RequestParam("courses") String coursesJson,
-            @RequestParam("duration") String durationJson
-    ) {
+    public ResponseEntity<String> generateExam( @RequestParam("courses") String coursesJson, @RequestParam("duration") String durationJson ) {
         try {
-
+            er.deleteAll();
             CourseInput[] courseInputs = objectMapper.readValue(coursesJson, CourseInput[].class);
             Map<String, String> courses = new LinkedHashMap<>();
             for (CourseInput input : courseInputs) {

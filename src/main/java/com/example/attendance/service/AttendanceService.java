@@ -7,6 +7,7 @@ import com.example.attendance.repository.AttendanceRepo;
 import com.example.attendance.repository.AttpercentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.FileWriter;
@@ -132,4 +133,11 @@ public class AttendanceService {
     }
 
 
+    public void delcourse(String courseid) {
+        attrepo.deleteBycourseId(courseid);
+    }
+
+    public void delstd(String studentid) {
+        attrepo.deleteBystudentId(studentid);
+    }
 }

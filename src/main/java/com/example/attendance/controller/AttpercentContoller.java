@@ -7,6 +7,7 @@ import com.example.attendance.model.AttperModel;
 import com.example.attendance.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 //import java.io.IOException;
@@ -49,6 +50,21 @@ public class AttpercentContoller {
                                          @RequestParam LocalDate endate)
     {
         return service.attfacy(facultyid,courseid,stdate,endate);
+    }
+
+
+    @GetMapping("/deletebycourseid")
+    public ResponseEntity<String> delcourseid(@RequestParam String courseid)
+    {
+        service.delcourse(courseid);
+        return ResponseEntity.ok("Course deleted successfully");
+    }
+
+    @GetMapping("/deletestudentid")
+    public ResponseEntity<String> deletestudent(@RequestParam String studentid)
+    {
+        service.delstd(studentid);
+        return ResponseEntity.ok("Student deleted successfully");
     }
 
 }
