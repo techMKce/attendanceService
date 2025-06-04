@@ -23,7 +23,7 @@ public interface AttpercentRepo extends JpaRepository<AttendanceModel , Long> {
                     "dept_id as deptId," + "dept_name as deptName," +
                     "sum(status) as presentcount," +
                     "(count(dates)) as totaldays, " +
-                    "ROUND((SUM(status)::decimal / count(dates)) * 100, 2) as percentage " +
+                    "ROUND((SUM(status)::decimal / count(dates)) * 100, 2) as percentage from attendance " +
                     "group by batch,sem,std_id,std_name,dept_id,dept_name;")
     public List<AttendanceAllModel> findAllPercent();
 
