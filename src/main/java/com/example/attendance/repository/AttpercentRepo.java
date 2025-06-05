@@ -55,7 +55,7 @@ public interface AttpercentRepo extends JpaRepository<AttendanceModel , Long> {
                     "faculty_id as facultyId,faculty_name as facultyName,"+
                     "course_id as courseId,course_name as courseName," +
                     "sum(status) as presentcount, (count(dates)) as totaldays," +
-                    "ROUND((SUM(status)::decimal / count(dates)) * 100, 2) as percentage " +
+                    "ROUND((SUM(status)::decimal / count(dates)) * 100, 2) as percentage from attendance " +
                     " where faculty_id=:fid and course_id=:cid and (dates>=:stdate and dates<=:endate) " +
                     "group by std_id,std_name,dept_id,dept_name,batch,sem,course_id,course_name,faculty_id,faculty_name;")
     public List<Attcourse> findByfacIdAndDateBetween(

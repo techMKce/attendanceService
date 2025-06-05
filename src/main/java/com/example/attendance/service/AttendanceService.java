@@ -77,7 +77,7 @@ public class AttendanceService {
         return er.findAll();
     }
 
-    public void generateTimetable(Map<String, String> courses, LocalDate startDate, LocalDate endDate) {
+    public ResponseEntity<String> generateTimetable(Map<String, String> courses, LocalDate startDate, LocalDate endDate) {
             String[] sessions = {"Forenoon", "Afternoon"};
             String[] timeSlots = {"9:00-12:00", "1:00-4:00"};
             
@@ -89,7 +89,8 @@ public class AttendanceService {
             LocalDate currentDate = startDate;
             int scheduledCoursesCount = 0;
     
-            for (String courseId : courseCodes) {
+            for (String courseId : courseCodes)
+            {
                 String courseName = courses.get(courseId);
                 boolean slotFoundForThisCourse = false;
     
@@ -118,17 +119,21 @@ public class AttendanceService {
                         currentDate = currentDate.plusDays(1);
                     }
                 }
-    
-                if (!slotFoundForThisCourse) {
-                    System.err.println("Warning: Could not schedule course '" + courseId + "' (" + courseName + ") and subsequent courses. End date reached or no suitable slots found.");
-                break;
-            }
-        }
 
-        if (scheduledCoursesCount == courseCodes.size()) {
-            System.out.println("Successfully scheduled all " + scheduledCoursesCount + " courses.");
-        } else {
-            System.out.println("Warning: Not all courses were scheduled. Scheduled " + scheduledCoursesCount + " out of " + courseCodes.size() + " courses within the given date range.");
+                if (!slotFoundForThisCourse)
+                {
+                    break;
+                }
+            }
+
+        if (scheduledCoursesCount == courseCodes.size())
+        {
+            return ResponseEntity.ok("Successfully scheduled all " + scheduledCoursesCount + " courses.");
+        }
+        else
+        {
+            er.deleteAll();
+            return ResponseEntity.ok("Warning: Not all courses were scheduled.\nChoose a valid date range based on course counts.");
         }
     }
 

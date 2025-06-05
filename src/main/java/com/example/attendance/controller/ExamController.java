@@ -47,9 +47,9 @@ public class ExamController {
             LocalDate startDate = LocalDate.parse(duration.startDate);
             LocalDate endDate = LocalDate.parse(duration.endDate);
 
-            service.generateTimetable(courses, startDate, endDate);
+            return service.generateTimetable(courses, startDate, endDate);
 
-            return ResponseEntity.ok("Exam timetable generated and stored in database successfully");
+//            return ResponseEntity.ok("Exam timetable generated and stored in database successfully");
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error generating timetable: " + e.getMessage());
